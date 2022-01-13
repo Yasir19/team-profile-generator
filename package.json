@@ -1,0 +1,25 @@
+{
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "an app to generate team profile by using the command line",
+  "main": ".index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yasir19/team-profile-generator.git"
+  },
+  "author": "yasir Habboo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Yasir19/team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/Yasir19/team-profile-generator#readme",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
