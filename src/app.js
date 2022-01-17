@@ -221,6 +221,6 @@ const createTeam = () =>{
 
     }
     managerInfo();
-
 }
+
 createTeam();
