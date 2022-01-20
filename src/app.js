@@ -3,7 +3,13 @@ const Employee = require('../lib/Employee');
 const Engineer = require('../lib/Engineer');
 const Manager = require('../lib/Manager');
 const Intern = require('../lib/Intern');
+const yourTeam = require('../src/page-template');
+const{writeFile} = require('../utils/generate-site');
+const fs = require('fs');
+const path = require('path');
 
+const output_dir = path.resolve(__dirname,"output");
+const outputPath = path.join(output_dir,"team.html")
 const teams = [];
 const arrayId = [];
 
@@ -71,8 +77,9 @@ const createTeam = () =>{
 
             }
         
-    ]).then(answers => {
-        const managers = new Manager(answers);
+    ])
+    .then(answers => {
+        const managers = new Manager(answers.managerName, answers.managerId, answers.email, answers.office);
         teams.push(managers);
         arrayId.push(answers.managerId);
         teamInfo();
@@ -91,17 +98,17 @@ const createTeam = () =>{
         ]).then(teamMembers =>{
             switch(teamMembers.teamMember){
                 case 'Engineer':
-                    enginnerInfo();
+                    engineerInfo();
                     break;
                     case 'Intern':
                         internInfo();
                         break;
                         default:
-                        yourTeam();
+                        buildTeam();
             }
         });
     }
-    const enginnerInfo = () =>{
+    const engineerInfo = () =>{
         return inquirer.prompt([
             {
                 type: 'input',
@@ -133,7 +140,7 @@ const createTeam = () =>{
             },
             {
                 type: 'input',
-                name: 'engineerName',
+                name: 'engineerEmail',
                 message: 'enter the engineer email address',
                 validate: answer =>{
                     const input = answer.match ( /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -150,8 +157,9 @@ const createTeam = () =>{
                 message: 'enter github account'
 
             }
-        ]).then(answers =>{
-            const engineer = new Engineer(answers);
+        ])
+        .then(answers =>{
+            const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.github);
             teams.push(engineer)
             arrayId.push(answers.engineerid);
             teamInfo()
@@ -212,15 +220,30 @@ const createTeam = () =>{
                     }
                 }
             }
-        ]).then(answers =>{
-            const intern = new Intern(answers);
+        ])
+        .then(internData =>{
+            const intern = new Intern(internData.internName, internData.internId, internData.internEmail, internData.school);
             teams.push(intern);
             arrayId.push(answers.internId);
             teamInfo();
         })
 
     }
-    managerInfo();
-}
 
+// function buildTeam(){
+//     if(!fs.existsSync(output_dir)){
+//         fs.mkdirSync(output_dir)
+//     }
+//     fs.writeFileSync(outputPath, yourTeam(teams), "utf-8")
+// }
+// managerInfo();
+// }
+// createTeam();
+managerInfo().then(teams =>{
+    return yourTeam(teams)
+})
+.then(teams => {
+    return writeFile(teams);
+})
+}
 createTeam();

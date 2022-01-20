@@ -1,4 +1,4 @@
-const createTeams = (team) => {
+const createTeams = (teams) => {
   const createManager = (manager) => {
     return `
         <div class = 'employee-card'>
@@ -8,9 +8,9 @@ const createTeams = (team) => {
         </div>
         <div class = 'card-body'>
         <ul class ='team-list'>
-        <li class ='list-item'>ID:${manager.getID()}</li>
+        <li class ='list-item'>ID:${manager.getId()}</li>
         <li class = 'list-item>Email:<a href='mailto:${manager.getEmail()}'>${manager.getEmail()}</a></li>
-        <li class = 'list-item>Office number:${manager.getOfficce()}</li>
+        <li class = 'list-item>Office number:${manager.getOffice()}</li>
         </ul>
         </div>
         </div>
@@ -25,9 +25,9 @@ const createTeams = (team) => {
         </div>
         <div class = 'card-body'>
         <ul class ='team-list'>
-        <li class ='list-item'>ID:${engineer.getID()}</li>
-        <li class = 'list-item>Email:<a href='mailto:${enginner.getEmail()}'>${engineer.getEmail()}</a></li>
-        <li class = 'list-item>GitHub account:<a href='https://github.com/${enginner.gitHub()}'>${engineer.gitHub()}</li>
+        <li class ='list-item'>ID:${engineer.getId()}</li>
+        <li class = 'list-item>Email:<a href='mailto:${engineer.getEmail()}'>${engineer.getEmail()}</a></li>
+        <li class = 'list-item>GitHub account:<a href='https://github.com/${engineer.gitHub()}'>${engineer.gitHub()}</li>
         </ul>
         </div>
         </div>
@@ -42,32 +42,35 @@ const createTeams = (team) => {
         </div>
         <div class = 'card-body'>
         <ul class ='team-list'>
-        <li class ='list-item'>ID:${intern.getID()}</li>
+        <li class ='list-item'>ID:${intern.getId()}</li>
         <li class = 'list-item>Email:<a href='mailto:${intern.getEmail()}'>${intern.getEmail()}</a></li>
-        <li class = 'list-item>GitHub account:<a href='https://github.com/${intern.gitHub()}'>${intern.gitHub()}</li>
+        <li class = 'list-item>School name:${intern.getSchool()}</li>
         </ul>
         </div>
         </div>
         `;
   };
   const pageInfo = [];
-  pageInfo.push(team
-    .filter(employee => employee.getRole()=='Manager').map(manager => createManager(manager))
-    );
-    pageInfo.push(team
-        .filter(employee => employee.getRole() === "Engineer")
-        .map(engineer => createEngineer(engineer))
-        .join('')
-    );
-    pageInfo.push(team
-        .filter(employee => employee.getRole() === 'Intern')
-        .map(intern => createIntern(intern)
-        .join(''))
-        );
-        return pageInfo.join('');
-    }
-    module.exports = team =>{
-        return`
+  pageInfo.push(
+    teams
+      .filter((teams) => teams.getRole() === "Manager")
+      .map((manager) => createManager(manager))
+  );
+  pageInfo.push(
+    teams
+      .filter((employee) => employee.getRole() === "Engineer")
+      .map((engineer) => createEngineer(engineer))
+      .join("")
+  );
+  pageInfo.push(
+    teams
+      .filter((employee) => employee.getRole() === "Intern")
+      .map((intern) => createIntern(intern)).join("")
+  );
+  return pageInfo.join("");
+};
+module.exports = (teams) => {
+  return `
         <!DOCTYPE html>
         <html lang='en'>
 
@@ -88,12 +91,11 @@ const createTeams = (team) => {
         <div>
         <div>
         <div>
-        ${createTeams(team)}
+        ${createTeams(teams)}
         </div>
         <div>
         </div>
         </body>
         </html>
         `;
-    };
-
+};
