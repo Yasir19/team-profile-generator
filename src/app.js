@@ -3,17 +3,42 @@ const Employee = require('../lib/Employee');
 const Engineer = require('../lib/Engineer');
 const Manager = require('../lib/Manager');
 const Intern = require('../lib/Intern');
-const yourTeam = require('../src/page-template');
+const generatePage = require('../src/page-template');
 const{writeFile} = require('../utils/generate-site');
 const fs = require('fs');
 const path = require('path');
 
-const output_dir = path.resolve(__dirname,"output");
-const outputPath = path.join(output_dir,"team.html")
+const outputDir = path.resolve(__dirname,'../Dist');
+const outputPath = path.join(outputDir,"index.html")
 const teams = [];
 const arrayId = [];
 
 const createTeam = () =>{
+       
+    const teamInfo = () =>{
+        return inquirer.prompt([
+            {
+            type: 'list',
+            name:'teamMember',
+            message: 'Select your team members',
+            choices:['Manager','Engineer','Intern','I dont want to include any members'],
+            }
+        ]).then(teamMembers =>{
+            switch(teamMembers.teamMember){
+                case 'Manager':
+                    managerInfo();
+                    break;
+                case 'Engineer':
+                    engineerInfo();
+                    break;
+                    case 'Intern':
+                        internInfo();
+                        break;
+                         default:
+                         buildTeam();
+            }
+        });
+    }
     const managerInfo = () => {
         console.log('please enter tour team information');
         return inquirer.prompt([
@@ -86,28 +111,6 @@ const createTeam = () =>{
     });
    
     };
-   
-    const teamInfo = () =>{
-        return inquirer.prompt([
-            {
-            type: 'list',
-            name:'teamMember',
-            message: 'Select your team members',
-            choices:['Engineer','Intern','I dont want to include any members'],
-            }
-        ]).then(teamMembers =>{
-            switch(teamMembers.teamMember){
-                case 'Engineer':
-                    engineerInfo();
-                    break;
-                    case 'Intern':
-                        internInfo();
-                        break;
-                        default:
-                        buildTeam();
-            }
-        });
-    }
     const engineerInfo = () =>{
         return inquirer.prompt([
             {
@@ -224,26 +227,28 @@ const createTeam = () =>{
         .then(internData =>{
             const intern = new Intern(internData.internName, internData.internId, internData.internEmail, internData.school);
             teams.push(intern);
-            arrayId.push(answers.internId);
+            arrayId.push(internData.internId);
             teamInfo();
         })
 
     }
 
-// function buildTeam(){
-//     if(!fs.existsSync(output_dir)){
-//         fs.mkdirSync(output_dir)
-//     }
-//     fs.writeFileSync(outputPath, yourTeam(teams), "utf-8")
-// }
-// managerInfo();
-// }
-// createTeam();
-managerInfo().then(teams =>{
-    return yourTeam(teams)
-})
-.then(teams => {
-    return writeFile(teams);
-})
+
+function buildTeam(){
+    if(!fs.existsSync(outputDir)){
+        fs.mkdirSync(outputDir)
+    }
+    fs.writeFileSync(outputPath, yourTeam(teams), "utf-8")
+}
+teamInfo();
 }
 createTeam();
+//  createTeam(teamInfo,managerInfo , engineerInfo, internInfo);
+// createTeam(teamInfo).then(managerInfo).then(engineerInfo).then(internInfo)
+// .then(teams =>{
+//     return generatePage(teams)
+// })
+// .then(teams => {
+//     return writeFile(teams);
+// })
+
