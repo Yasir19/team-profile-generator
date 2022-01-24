@@ -1,14 +1,13 @@
 const inquirer = require('inquirer');
-const Employee = require('../lib/Employee');
-const Engineer = require('../lib/Engineer');
-const Manager = require('../lib/Manager');
-const Intern = require('../lib/Intern');
-const generatePage = require('../src/page-template');
-const{writeFile} = require('../utils/generate-site');
+const Employee = require('./lib/Employee');
+const Engineer = require('./lib/Engineer');
+const Manager = require('./lib/Manager');
+const Intern = require('./lib/Intern');
+const generatePage = require('./src/page-template');
 const fs = require('fs');
 const path = require('path');
 
-const outputDir = path.resolve(__dirname,'../Dist');
+const outputDir = path.resolve(__dirname,'./Dist');
 const outputPath = path.join(outputDir,"index.html")
 const teams = [];
 const arrayId = [];
@@ -200,7 +199,7 @@ const createTeam = () =>{
             },
             {
                 type: 'input',
-                name: 'interEmail',
+                name: 'internEmail',
                 meassage: 'Enteer employee email',
                 validate: answer =>{
                     const input = answer.match( /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -238,7 +237,7 @@ function buildTeam(){
     if(!fs.existsSync(outputDir)){
         fs.mkdirSync(outputDir)
     }
-    fs.writeFileSync(outputPath, yourTeam(teams), "utf-8")
+    fs.writeFileSync(outputPath, generatePage(teams), "utf-8")
 }
 teamInfo();
 }
@@ -251,4 +250,5 @@ createTeam();
 // .then(teams => {
 //     return writeFile(teams);
 // })
+
 

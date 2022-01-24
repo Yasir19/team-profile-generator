@@ -1,0 +1,28 @@
+.title {
+    background-color:rgb(206, 204, 204);
+    color:#ffffff;
+    text-align: center;
+
+}
+.employee-style{
+    margin:30px auto;
+    flex-wrap: wrap;
+}
+.employee-card{
+    margin: 10px;
+    max-width: 500px;
+    width: 90%;
+    background-color: #428bf9;
+    color: #ffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+.card-body{
+    background-color: rgb(206, 204, 204);
+}
+.list-group-item{
+    color:#000000;
+    text-decoration: none;
+}
